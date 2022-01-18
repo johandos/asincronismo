@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  #Nginx Service
+#  web:
+#    image: nginx:alpine
+#    working_dir: /usr/src/app
+#    depends_on:
+#      - frontend
+#    volumes:
+#      - ./:/usr/src/app
+#      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+#      - ./docker/nginx/error.log:/var/log/nginx/error.log
+#    command: [ nginx-debug, '-g', 'daemon off;' ]
+#    container_name: web-intro
+#    ports:
+#      - "8280:80"
+#    networks:
+#      asincronismo-network:
+#        ipv4_address: 18.5.0.3
+  #React
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontend-asincronismo
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3002:3000"
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      asincronismo-network:
+        ipv4_address: 18.5.0.2
+
+#Docker Networks
+networks:
+  asincronismo-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 18.5.0.0/16
+#Volumes
+volumes:
+  dbdatamc:
+    driver: local
